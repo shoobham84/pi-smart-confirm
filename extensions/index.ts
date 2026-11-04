@@ -39,9 +39,12 @@ function isSafeBashCommand(rawCmd: string): boolean {
   const dangerousSyntax = /[`(){}<>]|(?<!&)&(?!&)/;
   if (dangerousSyntax.test(sanitized)) return false;
 
-  //block dangerous flags on otherwise "safe" commands (`find . -delete` or `find . -exec`)
-  const dangerousFlags = /\b(?:-exec|-execdir|-delete|-ok|-okdir|--output|-o)\b/;
+  //block dangerous flags (fixed \b boundary) including find write flags
+  const dangerousFlags = /(?:^|\s)(?:-exec|-execdir|-delete|-ok|-okdir|--output|-fprint|-fprintf|-fls)\b/;
   if (dangerousFlags.test(sanitized)) return false;
+
+  //catch file writes with sort -o (while leaving grep -o and find -o safe)
+  if (/\bsort\b.*\s-o\b/.test(sanitized)) return false;
 
   //split chained commands by | && || ; or newlines and validate every single command
   const subCommands = sanitized.split(/\s*(?:\|\||&&|\||;|\r?\n)\s*/);
@@ -83,10 +86,11 @@ export default function(pi: ExtensionAPI) {
     }
 
     let summary = "";
+    const input = event.input as Record<string, unknown> | undefined;
 
     switch (event.toolName) {
       case "bash": {
-        const rawCmd = (event.input as { command?: string }).command ?? "";
+        const rawCmd = (input?.command as string) ?? "";
         
         if (isSafeBashCommand(rawCmd)) {
           return undefined;
@@ -97,13 +101,13 @@ export default function(pi: ExtensionAPI) {
       }
 
       case "write": {
-        const path = (event.input as { path?: string }).path ?? "";
+        const path = (input?.path as string) ?? "";
         summary = `write file: \n\n ${path}`;
         break;
       }
 
       case "edit": {
-        const path = (event.input as { path?: string }).path ?? "";
+        const path = (input?.path as string) ?? "";
         summary = `edit file at path: \n\n ${path}`;
         break;
       }
@@ -119,7 +123,7 @@ export default function(pi: ExtensionAPI) {
       ['Deny', 'Allow']  
     );
 
-    if (choice !== 'abe haa bilkul') {
+    if (choice !== 'Allow') {
       return {
         block: true, 
         reason: `User kun doesn't want to execute ${event.toolName} UwU~`
