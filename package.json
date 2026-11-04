@@ -1,0 +1,17 @@
+{
+    "name": "pi-smart-confirm",
+    "version": "1.0.0",
+    "description": "Smart confirmation gate for Pi agent that permits harmless read-only inspection while requiring user confirmation for writes, edits, and other dangerous commands.",
+    "keywords": [
+      "pi-package"
+    ],
+    "license": "MIT",
+    "peerDependencies": {
+      "@earendil-works/pi-coding-agent": "*"
+    },
+    "pi": {
+      "extensions": [
+        "./extensions/index.ts"
+      ]
+    }
+  }
