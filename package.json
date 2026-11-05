@@ -3,15 +3,21 @@
     "version": "1.0.1",
     "description": "Smart confirmation gate for Pi agent that permits harmless read-only inspection while requiring user confirmation for writes, edits, and other dangerous commands.",
     "keywords": [
-      "pi-package"
+        "pi-package"
     ],
     "license": "MIT",
     "peerDependencies": {
-      "@earendil-works/pi-coding-agent": "*"
+        "@earendil-works/pi-coding-agent": "*"
     },
     "pi": {
-      "extensions": [
-        "./extensions/index.ts"
-      ]
+        "extensions": [
+            "./extensions/index.ts"
+        ]
+    },
+    "devDependencies": {
+        "tsx": "^4.23.15"
+    },
+    "scripts": {
+        "test": "tsx --test test/safety.test.ts"
     }
-  }
+}

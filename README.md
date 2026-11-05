@@ -1,5 +1,6 @@
 # pi-smart-confirm
-smart confirmation gate for the pi coding agent.
+ [![CI](https://github.com/shoobham84/pi-smart-confirm/actions/workflows/ci.yml/badge.svg)](https://github.com/shoobham84/pi-smart-confirm/actions/workflows/ci.yml)
+ smart confirmation gate for the pi coding agent.
 
 ### What do?
 - harmless commands like `cat`, `ls`, `grep`, `pwd`, a safe `|`, `2>/dev/null`, etc. run automatically without prompting

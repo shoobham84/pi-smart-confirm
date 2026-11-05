@@ -12,7 +12,7 @@ const ALLOWED_TOOLS: ReadonlySet<string> = new Set([
   "read", "read_file", "view", "glob", "grep", "list_dir", "ls"
 ]);
 
-function isSafeBashCommand(rawCmd: string): boolean {
+export function isSafeBashCommand(rawCmd: string): boolean {
   const cmd = rawCmd.trim();
   if (!cmd) return true;
 
